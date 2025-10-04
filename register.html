@@ -629,16 +629,13 @@
 
                 showSuccess(currentLanguage === 'ar' ? 
                     'تم إنشاء الحساب بنجاح! جاري توجيهك...' : 
-                    'Account created successfully! Redirecting...');// إرسال بريد تأكيد
+                    'Account created successfully! Redirecting...');
+// إرسال بريد تأكيد
 await user.sendEmailVerification();
 
-// عرض رسالة تأكيد
 showSuccess(currentLanguage === 'ar' ? 
     'تم إنشاء الحساب بنجاح! تم إرسال رابط التفعيل إلى بريدك الإلكتروني. جاري توجيهك...' : 
     'Account created successfully! Verification link sent to your email. Redirecting...');
-                
-                // إرسال رسالة ترحيب (اختياري)
-                await user.sendEmailVerification();
 
                 setTimeout(() => {
     // التوجيه إلى الصفحة الرئيسية بعد التسجيل الناجح
