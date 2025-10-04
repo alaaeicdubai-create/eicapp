@@ -395,7 +395,7 @@
 
         <div class="header">
             <h1 data-ar="إنشاء حساب جديد" data-en="Create New Account">إنشاء حساب جديد</h1>
-            <p data-ar="انضم إلى شبكة شركاء EIC Motors المتميزين" data-en="Join the exclusive network of EIC Motors partners">انضم إلى شبكة شركاء EIC Motors المتميزين</p>
+            <p data-ar="أنشئ حسابك الشخصي للاستفادة من خدمات EIC Motors المتميزة" data-en="Create your personal account to benefit from EIC Motors premium services">أنشئ حسابك الشخصي للاستفادة من خدمات EIC Motors المتميزة</p>
         </div>
 
         <div id="successMessage" class="success-message">
@@ -448,23 +448,27 @@
             </div>
 
             <div class="form-group">
-                <label for="company">
-                    <span data-ar="اسم الشركة/المركز" data-en="Company Name">اسم الشركة/المركز</span>
+                <label for="carType">
+                    <span data-ar="نوع المركبة" data-en="Vehicle Type">نوع المركبة</span>
                 </label>
-                <input type="text" id="company" name="company" 
-                    data-ar-placeholder="اسم الشركة أو المركز (اختياري)" 
-                    data-en-placeholder="Company or center name (optional)">
+                <select id="carType" name="carType">
+                    <option value="" data-ar="اختر نوع المركبة" data-en="Select Vehicle Type">اختر نوع المركبة</option>
+                    <option value="sedan" data-ar="سيدان" data-en="Sedan">سيدان</option>
+                    <option value="suv" data-ar="SUV" data-en="SUV">SUV</option>
+                    <option value="truck" data-ar="شاحنة" data-en="Truck">شاحنة</option>
+                    <option value="luxury" data-ar="فاخرة" data-en="Luxury">فاخرة</option>
+                </select>
             </div>
 
             <div class="form-group">
                 <label for="serviceType">
-                    <span data-ar="نوع الخدمة" data-en="Service Type">نوع الخدمة</span>
+                    <span data-ar="الخدمات المطلوبة" data-en="Required Services">الخدمات المطلوبة</span>
                 </label>
                 <div class="services-grid">
-                    <div class="service-card" data-ar="مركز خدمة" data-en="Service Center" onclick="toggleService(this)">مركز خدمة</div>
-                    <div class="service-card" data-ar="معرض سيارات" data-en="Car Showroom" onclick="toggleService(this)">معرض سيارات</div>
-                    <div class="service-card" data-ar="تأجير سيارات" data-en="Car Rental" onclick="toggleService(this)">تأجير سيارات</div>
-                    <div class="service-card" data-ar="قطع غيار" data-en="Spare Parts" onclick="toggleService(this)">قطع غيار</div>
+                    <div class="service-card" data-ar="صيانة دورية" data-en="Regular Maintenance" onclick="toggleService(this)">صيانة دورية</div>
+                    <div class="service-card" data-ar="غسيل وتلميع" data-en="Car Wash & Polish" onclick="toggleService(this)">غسيل وتلميع</div>
+                    <div class="service-card" data-ar="إصلاح أعطال" data-en="Repairs" onclick="toggleService(this)">إصلاح أعطال</div>
+                    <div class="service-card" data-ar="تغيير إطارات" data-en="Tire Change" onclick="toggleService(this)">تغيير إطارات</div>
                 </div>
                 <input type="hidden" id="serviceType" name="serviceType">
             </div>
@@ -548,6 +552,11 @@
             document.querySelectorAll('.service-card').forEach(card => {
                 card.textContent = card.getAttribute(`data-${lang}`);
             });
+
+            // تحديث خيارات نوع المركبة
+            document.querySelectorAll('option[data-ar]').forEach(option => {
+                option.textContent = option.getAttribute(`data-${lang}`);
+            });
         }
 
         function toggleService(card) {
@@ -565,7 +574,7 @@
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
-            const company = document.getElementById('company').value;
+            const carType = document.getElementById('carType').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
 
@@ -611,11 +620,11 @@
                     lastName: lastName,
                     email: email,
                     phone: phone,
-                    company: company,
+                    carType: carType,
                     serviceType: selectedService,
                     language: currentLanguage,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    userType: 'partner'
+                    userType: 'customer' // تغيير من partner إلى customer
                 });
 
                 showSuccess(currentLanguage === 'ar' ? 
