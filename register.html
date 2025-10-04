@@ -629,14 +629,25 @@
 
                 showSuccess(currentLanguage === 'ar' ? 
                     'تم إنشاء الحساب بنجاح! جاري توجيهك...' : 
-                    'Account created successfully! Redirecting...');
+                    'Account created successfully! Redirecting...');// إرسال بريد تأكيد
+await user.sendEmailVerification();
+
+// عرض رسالة تأكيد
+showSuccess(currentLanguage === 'ar' ? 
+    'تم إنشاء الحساب بنجاح! تم إرسال رابط التفعيل إلى بريدك الإلكتروني. جاري توجيهك...' : 
+    'Account created successfully! Verification link sent to your email. Redirecting...');
                 
                 // إرسال رسالة ترحيب (اختياري)
                 await user.sendEmailVerification();
 
                 setTimeout(() => {
-                    window.location.href = pageLinks[currentLanguage];
-                }, 2000);
+    // التوجيه إلى الصفحة الرئيسية بعد التسجيل الناجح
+    if (currentLanguage === 'ar') {
+        window.location.href = "https://sites.google.com/view/eicmotors-ae/ar/%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9";
+    } else {
+        window.location.href = "https://sites.google.com/view/eicmotors-ae/en/eic-motors";
+    }
+}, 2000);
                 
             } catch (error) {
                 console.error('Registration error:', error);
