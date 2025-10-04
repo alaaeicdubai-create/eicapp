@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - EIC Motors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            color: #d4af37;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(212, 175, 55, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(212, 175, 55, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(212, 175, 55, 0.4), 
+                transparent);
+        }
+
+        .login-container::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            animation: glow 8s ease-in-out infinite alternate;
+            opacity: 0.5;
+        }
+
+        @keyframes glow {
+            0% { 
+                transform: translate(-10%, -10%) scale(1) rotate(0deg);
+                opacity: 0.3;
+            }
+            100% { 
+                transform: translate(10%, 10%) scale(1.1) rotate(180deg);
+                opacity: 0.6;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #d4af37, #f4e4a6, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: rgba(184, 184, 184, 0.8);
+            font-weight: 300;
+        }
+
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 3;
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: rgba(212, 175, 55, 0.7);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 2px;
+            font-size: 0.8em;
+        }
+
+        .lang-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: rgba(212, 175, 55, 0.3);
+            color: #d4af37;
+        }
+
+        .lang-btn.active {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.4);
+            color: #f4e4a6;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #d4af37;
+            font-size: 1em;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgba(212, 175, 55, 0.6);
+            box-shadow: 
+                0 0 20px rgba(212, 175, 55, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.9), rgba(184, 148, 31, 0.9));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+            margin-bottom: 20px;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 1), rgba(184, 148, 31, 1));
+            box-shadow: 
+                0 0 30px rgba(212, 175, 55, 0.6),
+                0 10px 25px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-btn:disabled {
+            background: rgba(102, 102, 102, 0.5);
+            border-color: rgba(102, 102, 102, 0.3);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .social-login {
+            margin: 30px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(212, 175, 55, 0.3), 
+                transparent);
+        }
+
+        .divider span {
+            background: rgba(15, 15, 15, 0.8);
+            padding: 0 15px;
+            color: rgba(212, 175, 55, 0.7);
+            font-size: 0.9em;
+        }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-btn:hover::before {
+            left: 100%;
+        }
+
+        .social-btn.google {
+            border-color: rgba(219, 68, 55, 0.3);
+        }
+
+        .social-btn.google:hover {
+            border-color: rgba(219, 68, 55, 0.6);
+            background: rgba(219, 68, 55, 0.1);
+        }
+
+        .social-btn.facebook {
+            border-color: rgba(59, 89, 152, 0.3);
+        }
+
+        .social-btn.facebook:hover {
+            border-color: rgba(59, 89, 152, 0.6);
+            background: rgba(59, 89, 152, 0.1);
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .links a {
+            color: rgba(212, 175, 55, 0.8);
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .links a:hover {
+            color: #f4e4a6;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .links .separator {
+            color: rgba(255, 255, 255, 0.3);
+            margin: 0 10px;
+        }
+
+        .required {
+            color: #ff6b6b;
+            margin-right: 5px;
+        }
+
+        .success-message {
+            background: rgba(0, 255, 127, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 127, 0.3);
+            color: #00ff7f;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0, 255, 127, 0.2);
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .language-switcher {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+                text-align: center;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="language-switcher">
+            <button type="button" class="lang-btn active" id="btnAr" onclick="switchLanguage('ar')">العربية</button>
+            <button type="button" class="lang-btn" id="btnEn" onclick="switchLanguage('en')">English</button>
+        </div>
+
+        <div class="header">
+            <h1 data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</h1>
+            <p data-ar="مرحباً بعودتك إلى شبكة الشركاء" data-en="Welcome back to our partners network">مرحباً بعودتك إلى شبكة الشركاء</p>
+        </div>
+
+        <div id="successMessage" class="success-message">
+            <span data-ar="تم تسجيل الدخول بنجاح!" data-en="Login successful!">تم تسجيل الدخول بنجاح!</span>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">
+                    <span class="required">*</span>
+                    <span data-ar="البريد الإلكتروني" data-en="Email Address">البريد الإلكتروني</span>
+                </label>
+                <input type="email" id="email" name="email" required 
+                    data-ar-placeholder="أدخل بريدك الإلكتروني" 
+                    data-en-placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <span class="required">*</span>
+                    <span data-ar="كلمة المرور" data-en="Password">كلمة المرور</span>
+                </label>
+                <input type="password" id="password" name="password" required 
+                    data-ar-placeholder="أدخل كلمة المرور" 
+                    data-en-placeholder="Enter your password">
+            </div>
+
+            <button type="button" class="login-btn" id="loginBtn" onclick="loginWithEmail()">
+                <span data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</span>
+            </button>
+        </form>
+
+        <div class="social-login">
+            <div class="divider">
+                <span data-ar="أو سجل الدخول باستخدام" data-en="Or login with">أو سجل الدخول باستخدام</span>
+            </div>
+            
+            <div class="social-buttons">
+                <button type="button" class="social-btn google" onclick="loginWithGoogle()">
+                    <span data-ar="حساب Google" data-en="Google Account">حساب Google</span>
+                    <svg class="social-icon" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                </button>
+
+                <button type="button" class="social-btn facebook" onclick="loginWithFacebook()">
+                    <span data-ar="حساب Facebook" data-en="Facebook Account">حساب Facebook</span>
+                    <svg class="social-icon" viewBox="0 0 24 24">
+                        <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="links">
+            <a href="#" data-ar="نسيت كلمة المرور؟" data-en="Forgot Password?" onclick="forgotPassword()">نسيت كلمة المرور؟</a>
+            <span class="separator">|</span>
+            <a href="#" data-ar="إنشاء حساب جديد" data-en="Create New Account" onclick="createNewAccount()">إنشاء حساب جديد</a>
+        </div>
+    </div>
+
+    <script>
+        // قاعدة بيانات وهمية للمستخدمين المسجلين
+        const registeredUsers = [
+            { email: "admin@eicmotors.com", password: "123456", language: "ar" },
+            { email: "user@eicmotors.com", password: "123456", language: "en" },
+            { email: "test@eicmotors.com", password: "123456", language: "ar" }
+        ];
+
+        let currentLanguage = 'ar';
+
+        // الروابط الرئيسية
+        const pageLinks = {
+            ar: "https://sites.google.com/view/eicmotors-ae/ar/%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9",
+            en: "https://sites.google.com/view/eicmotors-ae/en/eic-motors",
+            createAccount: "https://sites.google.com/view/eicmotors-ae/create-new-account"
+        };
+
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+            
+            document.getElementById('btnAr').classList.toggle('active', lang === 'ar');
+            document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+            
+            document.querySelectorAll('[data-ar], [data-en]').forEach(element => {
+                element.textContent = element.getAttribute(`data-${lang}`);
+            });
+            
+            document.querySelectorAll('[data-ar-placeholder]').forEach(element => {
+                element.placeholder = element.getAttribute(`data-${lang}-placeholder`);
+            });
+        }
+
+        function loginWithEmail() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                showError(currentLanguage === 'ar' ? 
+                    'يرجى ملء جميع الحقول المطلوبة' : 
+                    'Please fill all required fields');
+                return;
+            }
+
+            const loginBtn = document.getElementById('loginBtn');
+            const originalText = loginBtn.innerHTML;
+            
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = (currentLanguage === 'ar' ? 
+                '<div class="loading"></div>جاري تسجيل الدخول...' : 
+                '<div class="loading"></div>Logging in...');
+
+            // محاكاة عملية تسجيل الدخول مع التحقق من المستخدم
+            setTimeout(() => {
+                const user = registeredUsers.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    showSuccess(currentLanguage === 'ar' ? 
+                        'تم تسجيل الدخول بنجاح! جاري التوجيه...' : 
+                        'Login successful! Redirecting...');
+                    
+                    // التوجيه إلى الصفحة الرئيسية بعد تأخير بسيط
+                    setTimeout(() => {
+                        window.location.href = pageLinks[user.language] || pageLinks[currentLanguage];
+                    }, 1500);
+                    
+                } else {
+                    showError(currentLanguage === 'ar' ? 
+                        'البريد الإلكتروني أو كلمة المرور غير صحيحة. أنت غير مسجل!' : 
+                        'Invalid email or password. You are not registered!');
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = originalText;
+                }
+            }, 2000);
+        }
+
+        function loginWithGoogle() {
+            const loginBtn = document.querySelector('.social-btn.google');
+            const originalText = loginBtn.innerHTML;
+            
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = (currentLanguage === 'ar' ? 
+                '<div class="loading"></div>جاري الاتصال بـ Google...' : 
+                '<div class="loading"></div>Connecting to Google...');
+
+            // محاكاة تسجيل الدخول بـ Google
+            setTimeout(() => {
+                showSuccess(currentLanguage === 'ar' ? 
+                    'تم تسجيل الدخول باستخدام Google بنجاح! جاري التوجيه...' : 
+                    'Google login successful! Redirecting...');
+                
+                // التوجيه إلى الصفحة الرئيسية بعد تأخير بسيط
+                setTimeout(() => {
+                    window.location.href = pageLinks[currentLanguage];
+                }, 1500);
+                
+            }, 2000);
+        }
+
+        function loginWithFacebook() {
+            const loginBtn = document.querySelector('.social-btn.facebook');
+            const originalText = loginBtn.innerHTML;
+            
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = (currentLanguage === 'ar' ? 
+                '<div class="loading"></div>جاري الاتصال بـ Facebook...' : 
+                '<div class="loading"></div>Connecting to Facebook...');
+
+            // محاكاة تسجيل الدخول بـ Facebook
+            setTimeout(() => {
+                showSuccess(currentLanguage === 'ar' ? 
+                    'تم تسجيل الدخول باستخدام Facebook بنجاح! جاري التوجيه...' : 
+                    'Facebook login successful! Redirecting...');
+                
+                // التوجيه إلى الصفحة الرئيسية بعد تأخير بسيط
+                setTimeout(() => {
+                    window.location.href = pageLinks[currentLanguage];
+                }, 1500);
+                
+            }, 2000);
+        }
+
+        function createNewAccount() {
+            // التوجيه المباشر إلى صفحة إنشاء الحساب
+            window.location.href = pageLinks.createAccount;
+        }
+
+        function forgotPassword() {
+            showError(currentLanguage === 'ar' ? 
+                'لإعادة تعيين كلمة المرور، يرجى زيارة صفحة إنشاء حساب جديد' : 
+                'To reset your password, please visit the create new account page');
+            
+            // توجيه تلقائي بعد تأخير
+            setTimeout(() => {
+                window.location.href = pageLinks.createAccount;
+            }, 3000);
+        }
+
+        function showSuccess(message) {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.querySelector('span').textContent = message;
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 4000);
+        }
+
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMessage');
+            errorMsg.textContent = message;
+            errorMsg.style.display = 'block';
+            setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 4000);
+        }
+
+        // السماح بالإرسال بالزر Enter
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                loginWithEmail();
+            }
+        });
+
+        // تهيئة اللغة العربية
+        switchLanguage('ar');
+    </script>
+</body>
+</html>
